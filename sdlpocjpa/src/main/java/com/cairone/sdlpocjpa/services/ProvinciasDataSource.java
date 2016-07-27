@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -48,6 +50,8 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
 	@Autowired private ProvinciaRepository provinciaRepository = null;
 	
 	@Autowired private ProvinciaFrmDtoValidator provinciaFrmDtoValidator = null;
+	
+	@Autowired private Logger logger = null;
 	
 	@Override
 	public Object create(ODataUri oDataUri, Object object, EntityDataModel entityDataModel) throws ODataException {
@@ -168,7 +172,7 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
 		throw new ODataSystemException("No support for transactions");
 	}
 
-	@Override
+	@Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	public QueryOperationStrategy getStrategy(ODataRequestContext oDataRequestContext, QueryOperation queryOperation, TargetType targetType) throws ODataException {
 		
 		ProvinciasStrategyBuilder builder = new ProvinciasStrategyBuilder();
