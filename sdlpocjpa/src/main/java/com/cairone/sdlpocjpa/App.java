@@ -17,14 +17,7 @@ public class App
 	public Logger logger() {
 		return LoggerFactory.getLogger(App.class);
 	}
-	/*
-	@Bean
-	public SecurityContext getSecurityContext() {
-		SecurityContext sc = SecurityContextHolder.createEmptyContext();
-		SecurityContextHolder.setContext(sc);
-		return sc;
-	}
-	*/
+	
     public static void main( String[] args ) {
     	SpringApplication.run(App.class, args);
     }
