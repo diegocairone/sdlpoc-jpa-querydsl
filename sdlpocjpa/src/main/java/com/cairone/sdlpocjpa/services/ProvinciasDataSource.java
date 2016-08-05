@@ -53,7 +53,7 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
 	
 	@Autowired private Logger logger = null;
 	
-	@Override
+	@Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	public Object create(ODataUri oDataUri, Object object, EntityDataModel entityDataModel) throws ODataException {
 
 		if(object instanceof ProvinciaEdm) {
@@ -90,7 +90,7 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
 		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
 	}
 
-	@Override
+	@Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	public Object update(ODataUri oDataUri, Object object, EntityDataModel entityDataModel) throws ODataException {
 
 		if(object instanceof ProvinciaEdm) {
@@ -133,7 +133,7 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
 		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
 	}
 	
-	@Override
+	@Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	public void delete(ODataUri oDataUri, EntityDataModel entityDataModel) throws ODataException {
 		
 		Option<Object> entity = ODataUriUtil.extractEntityWithKeys(oDataUri, entityDataModel);
@@ -157,12 +157,12 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
     	throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
 	}
 
-	@Override
+	@Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	public void createLink(ODataUri arg0, ODataLink arg1, EntityDataModel arg2) throws ODataException {
 		throw new ODataNotImplementedException("Not supported for now");
 	}
 
-	@Override
+	@Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	public void deleteLink(ODataUri arg0, ODataLink arg1, EntityDataModel arg2) throws ODataException {
 		throw new ODataNotImplementedException("Not supported for now");
 	}
@@ -172,7 +172,7 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
 		throw new ODataSystemException("No support for transactions");
 	}
 
-	@Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+	@Override
 	public QueryOperationStrategy getStrategy(ODataRequestContext oDataRequestContext, QueryOperation queryOperation, TargetType targetType) throws ODataException {
 		
 		ProvinciasStrategyBuilder builder = new ProvinciasStrategyBuilder();

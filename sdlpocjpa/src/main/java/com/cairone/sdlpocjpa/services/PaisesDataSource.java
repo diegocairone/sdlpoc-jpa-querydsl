@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -44,7 +45,7 @@ public class PaisesDataSource implements DataSource, DataSourceProvider {
 	@Autowired private PaisRepository paisRepository = null;
 	@Autowired private PaisFrmDtoValidator paisFrmDtoValidator = null;
 	
-    @Override
+    @Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public Object create(ODataUri oDataUri, Object object, EntityDataModel entityDataModel) throws ODataException {
     	
     	if(object instanceof PaisEdm) {
@@ -73,7 +74,7 @@ public class PaisesDataSource implements DataSource, DataSourceProvider {
 		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PAIS");
     }
 
-    @Override
+    @Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public Object update(ODataUri oDataUri, Object object, EntityDataModel entityDataModel) throws ODataException {
     	
     	if(object instanceof PaisEdm) {
@@ -105,7 +106,7 @@ public class PaisesDataSource implements DataSource, DataSourceProvider {
     	throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PAIS");
     }
 
-    @Override
+    @Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public void delete(ODataUri oDataUri, EntityDataModel entityDataModel) throws ODataException {
     	Option<Object> entity = ODataUriUtil.extractEntityWithKeys(oDataUri, entityDataModel);
     	
@@ -131,12 +132,12 @@ public class PaisesDataSource implements DataSource, DataSourceProvider {
     	throw new ODataSystemException("No support for transactions");
     }
 
-    @Override
+    @Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public void createLink(ODataUri oDataUri, ODataLink oDataLink, EntityDataModel entityDataModel) throws ODataException {
     	throw new ODataNotImplementedException("Not supported for now");
     }
 
-    @Override
+    @Override @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public void deleteLink(ODataUri oDataUri, ODataLink oDataLink, EntityDataModel entityDataModel) throws ODataException {
     	throw new ODataNotImplementedException("Not supported for now");
     }
