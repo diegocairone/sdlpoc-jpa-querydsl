@@ -36,6 +36,7 @@ import com.sdl.odata.api.parser.TargetType;
 import com.sdl.odata.api.processor.datasource.DataSource;
 import com.sdl.odata.api.processor.datasource.DataSourceProvider;
 import com.sdl.odata.api.processor.datasource.ODataDataSourceException;
+import com.sdl.odata.api.processor.datasource.ODataEntityNotFoundException;
 import com.sdl.odata.api.processor.datasource.TransactionalDataSource;
 import com.sdl.odata.api.processor.link.ODataLink;
 import com.sdl.odata.api.processor.query.QueryOperation;
@@ -117,12 +118,23 @@ public class ProvinciasDataSource implements DataSource, DataSourceProvider {
 			Integer paisID = provinciaFrmDto.getPaisID();
 			PaisEntity paisEntity = paisRepository.findOne(paisID);
 			
-			ProvinciaEntity provinciaEntity = new ProvinciaEntity();
+			if(paisEntity == null) {
+				throw new ODataEntityNotFoundException(String.format("NO SE ENCUENTRA LA ENTIDAD PAIS CON ID %s", paisID));
+			}
 			
-			provinciaEntity.setId(provinciaFrmDto.getId());
-			provinciaEntity.setPais(paisEntity);
-			provinciaEntity.setDescripcion(provinciaFrmDto.getDescripcion());
-			provinciaEntity.setDescripcionRed(provinciaFrmDto.getDescripcionReducida());
+			ProvinciaEntity provinciaEntity = provinciaRepository.findOne(new ProvinciaPKEntity(paisEntity, provinciaFrmDto.getId()));
+			
+			if(provinciaEntity == null) {
+				throw new ODataEntityNotFoundException(String.format("NO SE ENCUENTRA LA ENTIDAD PROVINCIA CON ID (paisID=%s,ID=%s)", paisID, provinciaFrmDto.getId()));
+			}
+			
+			if(provinciaFrmDto.getDescripcion() != null) {
+				provinciaEntity.setDescripcion(provinciaFrmDto.getDescripcion());
+			}
+			
+			if(provinciaFrmDto.getDescripcionReducida() != null) {
+				provinciaEntity.setDescripcionRed(provinciaFrmDto.getDescripcionReducida());
+			}
 			
 			provinciaRepository.save(provinciaEntity);
 			ProvinciaEdm provinciaNueva = new ProvinciaEdm(provinciaEntity);

@@ -20,6 +20,5 @@ public class ProvinciaFrmDtoValidator implements Validator {
 		
 		ValidationUtils.rejectIfEmpty(errors, "id", "required", new Object[] {"ID DE LA PROVINCIA"});
 		ValidationUtils.rejectIfEmpty(errors, "paisID", "required", new Object[] {"ID DEL PAIS AL QUE PERTENCE LA PROVINCIA"});
-		ValidationUtils.rejectIfEmpty(errors, "descripcion", "required", new Object[] {"NOMBRE DE LA PROVINCIA"});
 	}
 }

@@ -25,10 +25,10 @@ public class ProvinciaEdm implements Serializable {
 	@EdmNavigationProperty(name = "pais", nullable = true) 
 	private PaisEdm pais = null;
 	
-	@EdmProperty(name = "descripcion", nullable = false, maxLength = 40)
+	@EdmProperty(name = "descripcion", nullable = true, maxLength = 40)
 	private String descripcion = null;
 	
-	@EdmProperty(name = "descripcionReducida", nullable = false, maxLength = 8)
+	@EdmProperty(name = "descripcionReducida", nullable = true, maxLength = 8)
 	private String descripcionReducida = null;
 	
 	public ProvinciaEdm() {}
