@@ -41,7 +41,7 @@ public class PaisesStrategyBuilder {
 	
 	private List<String> propertyNames;
 	private List<Sort.Order> orderByList = null;
-	private int limit = Integer.MAX_VALUE;
+	private int limit = 0;
     private int skip = 0;
     private boolean count;
 	private boolean includeCount;
@@ -110,7 +110,9 @@ public class PaisesStrategyBuilder {
         
     	Map<String, Object> keys = selectByKeyOperation.getKeyAsJava();
     	
-        Integer id = Integer.valueOf(keys.get("id").toString());
+    	Object candidato = keys.values().toArray()[0];
+    	Integer id = Integer.valueOf(candidato.toString());
+        //Integer id = Integer.valueOf(keys.get("id").toString());
         
         BooleanExpression exp = qPais.id.eq(id);
         this.expression = this.expression == null ? exp : this.expression.and(exp);

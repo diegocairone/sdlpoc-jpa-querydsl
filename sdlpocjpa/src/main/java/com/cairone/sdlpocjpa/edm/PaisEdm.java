@@ -9,13 +9,13 @@ import com.sdl.odata.api.edm.annotations.EdmEntity;
 import com.sdl.odata.api.edm.annotations.EdmEntitySet;
 import com.sdl.odata.api.edm.annotations.EdmProperty;
 
-@EdmEntity(name = "Pais", namespace = "com.cairone.sdlpocjpa", key = "Codigo", containerName = "SDLPoC")
+@EdmEntity(name = "Pais", namespace = "com.cairone.sdlpocjpa", key = "id", containerName = "SDLPoC")
 @EdmEntitySet("Paises")
 public class PaisEdm implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	@EdmProperty(name = "Codigo", nullable = true)
+	@EdmProperty(name = "id", nullable = true)
 	private Integer id = null;
 	
 	@EdmProperty(name = "descripcion", nullable = true)

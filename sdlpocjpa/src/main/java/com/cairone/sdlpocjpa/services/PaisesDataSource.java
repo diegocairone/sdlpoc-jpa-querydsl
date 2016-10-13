@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -146,6 +148,7 @@ public class PaisesDataSource implements DataSource, DataSourceProvider {
 	public QueryOperationStrategy getStrategy(ODataRequestContext oDataRequestContext, QueryOperation queryOperation, TargetType targetType) throws ODataException {
 		
 		PaisesStrategyBuilder builder = new PaisesStrategyBuilder();
+		
 		BooleanExpression expression = builder.buildCriteria(queryOperation, oDataRequestContext);
 		List<Sort.Order> orderByList = builder.getOrderByList();
 		
@@ -153,13 +156,30 @@ public class PaisesDataSource implements DataSource, DataSourceProvider {
         int skip = builder.getSkip();
 		List<String> propertyNames = builder.getPropertyNames();
 		
-		List<PaisEntity> paisEntities = (List<PaisEntity>) ( orderByList == null || orderByList.size() == 0 ?
-				paisRepository.findAll(expression) :
-				paisRepository.findAll(expression, new Sort(orderByList)) );
+		Iterable<PaisEntity> paisEntities = null;
+		
+		if(limit > 0) {
+			
+			PageRequest pr = null;
+			
+			if(orderByList != null && orderByList.size() != 0) {
+				pr = new PageRequest(0, limit, new Sort(orderByList));
+			} else {
+				pr = new PageRequest(0, limit);
+			}
+			
+			Page<PaisEntity> pagina = paisRepository.findAll(expression, pr);
+			paisEntities = pagina.getContent();		
+			
+		} else {
+			paisEntities = paisRepository.findAll(expression );
+		}
+		
+		final List<PaisEntity> paisEntities2 = (List<PaisEntity>) paisEntities;
 		
 		return () -> {
 
-			List<PaisEdm> filtered = paisEntities.stream().map(entity -> { return new PaisEdm(entity); }).collect(Collectors.toList());
+			List<PaisEdm> filtered = paisEntities2.stream().map(entity -> { return new PaisEdm(entity); }).collect(Collectors.toList());
 			
 			long count = 0;
         	
@@ -171,8 +191,8 @@ public class PaisesDataSource implements DataSource, DataSourceProvider {
                 }
             }
 
-            if (skip != 0 || limit != Integer.MAX_VALUE) {
-                filtered = filtered.stream().skip(skip).limit(limit).collect(Collectors.toList());
+            if (skip != 0) {
+                filtered = filtered.stream().skip(skip).collect(Collectors.toList());
             }
 
             if (propertyNames != null && !propertyNames.isEmpty()) {
