@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.authorizeRequests()
+			.antMatchers("/odata/PoCService.svc/$metadata").permitAll()
 	    	.anyRequest()
 	    	.fullyAuthenticated()
 	    	.and()
